@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>X5 Summer Bootcamp</title>
+<style>
+:root {
+  --bg:#0D1B2A; --card:#1E2D3D; --card2:#263445; --card3:#2e3f52;
+  --orange:#F97316; --gold:#F59E0B; --white:#FFFFFF;
+  --text:#E2E8F0; --muted:#94A3B8; --subtle:#475569; --line:#334155;
+  --green:#16A34A; --green-bg:#052e16; --green-t:#4ade80;
+  --yellow-bg:#1a1200; --yellow-t:#fbbf24;
+  --orange-bg:#1c0800; --orange-t:#fb923c;
+  --red-bg:#1f0000; --red-t:#f87171;
+  --r:10px; --shadow:0 2px 16px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;}
+/* HEADER */
+header{background:var(--card);border-bottom:2px solid var(--orange);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.logo{font-size:1rem;font-weight:800;color:var(--orange);letter-spacing:.5px;}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.last-updated{font-size:.65rem;color:var(--muted);}
+.refresh-btn{background:none;border:1px solid var(--subtle);color:var(--muted);font-size:.65rem;padding:2px 8px;border-radius:4px;cursor:pointer;}
+.refresh-btn:hover{border-color:var(--orange);color:var(--orange);}
+/* NAV */
+nav{background:var(--card);border-bottom:1px solid var(--line);padding:0 8px;display:flex;overflow-x:auto;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:none;padding:10px 14px;border:none;background:none;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;}
+nav button.active{color:var(--orange);border-bottom-color:var(--orange);}
+nav button:hover:not(.active){color:var(--text);}
+/* VIEWS */
+.view{display:none;padding:16px;max-width:960px;margin:0 auto;padding-bottom:40px;}
+.view.active{display:block;}
+/* CARDS */
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);}
+.card-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);margin-bottom:12px;}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}
+/* FORM */
+.form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+.form-group label{font-size:.78rem;color:var(--muted);font-weight:600;}
+.form-group input,.form-group select,.form-group textarea{
+  background:var(--card2);border:1px solid var(--subtle);border-radius:6px;
+  color:var(--text);padding:10px 12px;font-size:.9rem;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:2px solid var(--orange);border-color:transparent;}
+.form-group textarea{resize:vertical;min-height:60px;font-family:inherit;}
+select option{background:#1E2D3D;}
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;
+  background:var(--card2);border-radius:8px;padding:11px 14px;margin-bottom:8px;}
+.toggle-label{font-size:.88rem;font-weight:500;}
+.toggle{position:relative;width:46px;height:26px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.slider{position:absolute;inset:0;background:var(--subtle);border-radius:26px;cursor:pointer;transition:.2s;}
+.slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;}
+.toggle input:checked+.slider{background:var(--green);}
+.toggle input:checked+.slider:before{transform:translateX(20px);}
+/* SUBMIT BTN */
+.btn-submit{display:block;width:100%;padding:14px;background:var(--orange);color:#fff;border:none;
+  border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.15s;}
+.btn-submit:hover:not(:disabled){background:#ea6c0a;}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+/* SUCCESS/ERROR */
+.notice{padding:12px 16px;border-radius:8px;font-weight:600;margin-bottom:14px;font-size:.88rem;display:none;}
+.notice.success{background:var(--green-bg);border:1px solid var(--green);color:var(--green-t);}
+.notice.error{background:var(--red-bg);border:1px solid #dc2626;color:var(--red-t);}
+/* STATUS PILLS */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.7rem;font-weight:700;white-space:nowrap;}
+.pill-green{background:var(--green-bg);color:var(--green-t);}
+.pill-yellow{background:var(--yellow-bg);color:var(--yellow-t);}
+.pill-orange{background:var(--orange-bg);color:var(--orange-t);}
+.pill-red{background:var(--red-bg);color:var(--red-t);}
+/* STAT BOXES */
+.stat-box{background:var(--card2);border-radius:8px;padding:12px;text-align:center;}
+.stat-num{font-size:1.5rem;font-weight:800;color:var(--orange);}
+.stat-lbl{font-size:.65rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.8px;}
+/* TABLE */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:500px;}
+th{color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:1px;padding:8px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:9px 8px;border-bottom:1px solid rgba(51,65,85,.4);white-space:nowrap;}
+tr:hover td{background:rgba(255,255,255,.03);}
+.rank-cell{font-weight:800;color:var(--muted);width:28px;}
+.rank-cell.top{color:var(--gold);}
+/* BADGES */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.badge{border-radius:10px;padding:14px 10px;text-align:center;border:2px solid;}
+.badge.earned{background:rgba(249,115,22,.1);border-color:var(--orange);}
+.badge.locked{background:var(--card2);border-color:var(--subtle);opacity:.65;}
+.badge-icon{font-size:1.5rem;margin-bottom:6px;}
+.badge-name{font-size:.72rem;font-weight:700;margin-bottom:4px;}
+.badge.earned .badge-name{color:var(--orange);}
+.badge.locked .badge-name{color:var(--muted);}
+.badge-prog{font-size:.65rem;color:var(--muted);}
+.prog-bar{height:5px;background:var(--subtle);border-radius:3px;margin-top:5px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--orange);border-radius:3px;transition:width .4s;}
+/* ALERTS */
+.alert-item{background:var(--card2);border-left:3px solid;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:8px;}
+.alert-item.red{border-color:#dc2626;}
+.alert-item.orange{border-color:var(--orange);}
+.alert-item.yellow{border-color:var(--gold);}
+.alert-name{font-weight:700;font-size:.86rem;}
+.alert-detail{font-size:.75rem;color:var(--muted);margin-top:2px;}
+/* LOADING / SETUP */
+.loading-box{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:16px;}
+.spinner{width:40px;height:40px;border:3px solid var(--card2);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.setup-box{max-width:600px;margin:32px auto;background:var(--card);border-radius:var(--r);padding:28px;border:2px solid var(--orange);}
+.setup-box h2{color:var(--orange);margin-bottom:12px;}
+.setup-box ol{padding-left:20px;line-height:2;color:var(--muted);font-size:.88rem;}
+.setup-box ol li{margin-bottom:4px;}
+.setup-box code{background:var(--card2);padding:2px 6px;border-radius:4px;color:var(--orange);font-family:monospace;}
+.setup-url-input{margin-top:16px;display:flex;gap:8px;}
+.setup-url-input input{flex:1;background:var(--card2);border:1px solid var(--subtle);border-radius:6px;color:var(--text);padding:10px 12px;font-size:.85rem;}
+.setup-url-input button{background:var(--orange);color:#fff;border:none;border-radius:6px;padding:10px 18px;font-weight:700;cursor:pointer;white-space:nowrap;}
+/* TREND */
+.trend-up{color:var(--green-t);}
+.trend-down{color:var(--red-t);}
+.trend-neutral{color:var(--muted);}
+/* SECTION DIVIDER */
+.section-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);margin:16px 0 8px;}
+/* RESPONSIVE */
+@media(max-width:480px){
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr;}
+  .g4{grid-template-columns:1fr 1fr;}
+  .badge-grid{grid-template-columns:1fr 1fr;}
+  header{padding:10px 12px;}
+  .logo{font-size:.9rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡ X5 SUMMER BOOTCAMP</div>
+  <div class="header-right">
+    <span class="last-updated" id="lastUpdated">—</span>
+    <button class="refresh-btn" onclick="loadData(true)">↻ Refresh</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('checkin',this)">Check-In</button>
+  <button onclick="switchTab('mystats',this)">My Stats</button>
+  <button onclick="switchTab('leaderboard',this)">Leaderboard</button>
+  <button onclick="switchTab('leadership',this)">Leadership</button>
+</nav>
+
+<!-- ==================== SETUP SCREEN ==================== -->
+<div id="setup-screen" style="display:none;padding:16px;">
+  <div class="setup-box">
+    <h2>🔧 Connect to Google Sheets</h2>
+    <p style="color:var(--muted);margin-bottom:16px;font-size:.88rem;">
+      Paste your Google Apps Script Web App URL below to go live.
+      If you haven't deployed the Apps Script yet, follow these steps:
+    </p>
+    <ol>
+      <li>Open your Google Sheet → <b>Extensions</b> → <b>Apps Script</b></li>
+      <li>Paste the contents of <code>x5_apps_script.gs</code></li>
+      <li>Run <code>setupSheets()</code> (click Run button)</li>
+      <li>Authorize permissions when prompted</li>
+      <li><b>Deploy</b> → <b>New deployment</b> → Type: <b>Web App</b></li>
+      <li>Execute as: <b>Me</b> · Who has access: <b>Anyone</b></li>
+      <li>Click <b>Deploy</b> → copy the Web App URL</li>
+      <li>Paste it here ↓</li>
+    </ol>
+    <div class="setup-url-input">
+      <input type="url" id="apiUrlInput" placeholder="https://script.google.com/macros/s/..." />
+      <button onclick="saveApiUrl()">Connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MAIN LOADING ==================== -->
+<div id="main-loading" style="display:none;">
+  <div class="loading-box"><div class="spinner"></div><span style="color:var(--muted)">Loading dashboard…</span></div>
+</div>
+<div id="main-error" style="display:none;padding:16px;">
+  <div class="card" style="border:1px solid #dc2626;text-align:center;padding:24px;">
+    <div style="color:var(--red-t);font-size:1rem;font-weight:700;margin-bottom:8px;">Failed to load data</div>
+    <div id="errorMsg" style="color:var(--muted);font-size:.85rem;margin-bottom:16px;"></div>
+    <button onclick="loadData(true)" style="background:var(--orange);color:#fff;border:none;padding:10px 24px;border-radius:6px;font-weight:700;cursor:pointer;">Retry</button>
+    <div style="margin-top:12px;"><a href="#" onclick="clearApiUrl()" style="color:var(--muted);font-size:.78rem;">Change API URL</a></div>
+  </div>
+</div>
+
+<!-- ==================== VIEWS ==================== -->
+<div id="views" style="display:none;">
+
+<!-- CHECK-IN -->
+<div id="view-checkin" class="view active">
+  <div class="card">
+    <div class="card-title">Daily Check-In</div>
+    <div id="ci-success" class="notice success">✅ Check-in submitted! See you tomorrow.</div>
+    <div id="ci-error"   class="notice error"></div>
+
+    <div class="form-group">
+      <label>Your Name *</label>
+      <select id="f-rep"><option value="">— Select your name —</option></select>
+    </div>
+
+    <div class="section-label">Morning Accountability</div>
+    <div class="toggle-row">
+      <span class="toggle-label">📸 Photo Posted In Pronto</span>
+      <label class="toggle"><input type="checkbox" id="f-photo"><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">🤝 Morning Meeting Attended</span>
+      <label class="toggle"><input type="checkbox" id="f-meeting"><span class="slider"></span></label>
+    </div>
+    <div class="form-group" style="margin-top:8px;">
+      <label>Daily Goal</label>
+      <input type="text" id="f-goal" placeholder="What's your #1 goal today?" autocomplete="off">
+    </div>
+
+    <div class="section-label">Development Block</div>
+    <div class="toggle-row">
+      <span class="toggle-label">📖 Read 10 Pages</span>
+      <label class="toggle"><input type="checkbox" id="f-read"><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">✏️ Journal</span>
+      <label class="toggle"><input type="checkbox" id="f-journal"><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">🎭 Roleplay (15 min)</span>
+      <label class="toggle"><input type="checkbox" id="f-role"><span class="slider"></span></label>
+    </div>
+    <div class="form-group" style="margin-top:8px;">
+      <label>Atomic Habits Pages Read Today</label>
+      <input type="number" id="f-ah" min="0" max="50" placeholder="0" inputmode="numeric">
+    </div>
+
+    <div class="section-label">Gym</div>
+    <div class="toggle-row">
+      <span class="toggle-label">💪 Gym Attended</span>
+      <label class="toggle"><input type="checkbox" id="f-gym"><span class="slider"></span></label>
+    </div>
+
+    <div class="section-label">Field</div>
+    <div class="g2">
+      <div class="form-group"><label>Doors Knocked</label><input type="number" id="f-doors" min="0" placeholder="0" inputmode="numeric"></div>
+      <div class="form-group"><label>Conversations</label><input type="number" id="f-convos" min="0" placeholder="0" inputmode="numeric"></div>
+    </div>
+    <div class="g2">
+      <div class="form-group"><label>Appointments Set</label><input type="number" id="f-apps" min="0" placeholder="0" inputmode="numeric"></div>
+      <div class="form-group"><label>Deals Closed</label><input type="number" id="f-deals" min="0" placeholder="0" inputmode="numeric"></div>
+    </div>
+
+    <div class="section-label">EOD Reflection</div>
+    <div class="form-group"><label>Biggest Win Today</label><textarea id="f-win" placeholder="What was your biggest win?"></textarea></div>
+    <div class="form-group"><label>How to Improve Tomorrow</label><textarea id="f-improve" placeholder="One thing you'll do differently..."></textarea></div>
+
+    <button class="btn-submit" id="ci-btn" onclick="submitCheckin()">Submit Check-In</button>
+  </div>
+</div>
+
+<!-- MY STATS -->
+<div id="view-mystats" class="view">
+  <div class="card">
+    <div class="card-title">Select Rep</div>
+    <select id="stats-rep" onchange="renderMyStats()" style="background:var(--card2);border:1px solid var(--subtle);border-radius:6px;color:var(--text);padding:10px 12px;font-size:.9rem;width:100%;">
+      <option value="">— Select your name —</option>
+    </select>
+  </div>
+  <div id="stats-content"></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="view-leaderboard" class="view">
+  <div class="card">
+    <div class="card-title">Season Leaderboard · Week <span id="lb-week">—</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Rep</th><th>Status</th><th>Score</th>
+            <th>Field</th><th>Mtgs</th><th>Gym</th><th>Dev</th>
+            <th>Streak</th><th>AH</th><th>Doors</th><th>Apps</th><th>Deals</th><th>↑↓</th>
+          </tr>
+        </thead>
+        <tbody id="lb-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERSHIP -->
+<div id="view-leadership" class="view">
+  <div class="card">
+    <div class="card-title">Team Overview</div>
+    <div class="g4" id="ld-overview"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Needs Attention</div>
+    <div id="ld-alerts"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Missed Today (last check-in)</div>
+    <div class="g3" id="ld-missed"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Team Stats</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rep</th><th>Status</th><th>Score</th>
+            <th>Field%</th><th>Mtg%</th><th>Gym%</th><th>Dev%</th>
+            <th>Streak</th><th>Gym Sess</th><th>Doors</th><th>Apps</th><th>Deals</th><th>↑↓</th>
+          </tr>
+        </thead>
+        <tbody id="ld-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /views -->
+
+<script>
+// ============================================================
+// CONFIGURATION
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbxoc8UfD0QHlm2lig0Zxj6FsTLsmFYUR58jlbpjtxtJ-FTzGzacSeQ2TEgR84Pxsu8Srg/exec';
+// OR use localStorage (set via setup screen)
+
+let _apiUrl = API_URL || localStorage.getItem('x5_api_url') || '';
+let _data   = null;  // cached API response
+let _refreshTimer = null;
+
+const BADGE_ICONS = {
+  streak7:'🔥', streak30:'⚡', ahDone:'📖',
+  gym20:'💪', apps10:'📅', apps25:'🎯',
+  doors1k:'🚪', doors5k:'🏆', green4w:'🟢'
+};
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('f-rep').innerHTML = '<option value="">— Select your name —</option>';
+  if (!_apiUrl) {
+    showSetup();
+  } else {
+    loadData(false);
+  }
+});
+
+function showSetup() {
+  document.getElementById('setup-screen').style.display = 'block';
+  document.getElementById('main-loading').style.display  = 'none';
+  document.getElementById('main-error').style.display    = 'none';
+  document.getElementById('views').style.display         = 'none';
+}
+
+function saveApiUrl() {
+  const url = document.getElementById('apiUrlInput').value.trim();
+  if (!url.startsWith('http')) { alert('Please enter a valid URL.'); return; }
+  localStorage.setItem('x5_api_url', url);
+  _apiUrl = url;
+  document.getElementById('setup-screen').style.display = 'none';
+  loadData(true);
+}
+
+function clearApiUrl() {
+  localStorage.removeItem('x5_api_url');
+  _apiUrl = '';
+  _data   = null;
+  showSetup();
+}
+
+// ============================================================
+// DATA LOADING
+// ============================================================
+async function loadData(force) {
+  if (!_apiUrl) { showSetup(); return; }
+  if (!force && _data) { renderAll(); return; }
+
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('main-loading').style.display  = 'block';
+  document.getElementById('main-error').style.display    = 'none';
+  document.getElementById('views').style.display         = 'none';
+
+  try {
+    const res  = await fetchWithTimeout(_apiUrl, {}, 20000);
+    const json = await res.json();
+    if (json.status !== 'ok') throw new Error(json.message || 'API returned error');
+    _data = json;
+    document.getElementById('main-loading').style.display = 'none';
+    document.getElementById('views').style.display        = 'block';
+    renderAll();
+    scheduleRefresh();
+  } catch(err) {
+    document.getElementById('main-loading').style.display = 'none';
+    document.getElementById('main-error').style.display   = 'block';
+    document.getElementById('errorMsg').textContent       = err.message;
+  }
+}
+
+function fetchWithTimeout(url, opts, ms) {
+  const ctrl = new AbortController();
+  const id   = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(id));
+}
+
+function scheduleRefresh() {
+  if (_refreshTimer) clearInterval(_refreshTimer);
+  _refreshTimer = setInterval(() => loadData(true), 60000);
+}
+
+function renderAll() {
+  if (!_data) return;
+  const ts = new Date(_data.lastUpdated);
+  document.getElementById('lastUpdated').textContent = 'Updated ' + ts.toLocaleTimeString();
+  populateRepDropdowns();
+  renderLeaderboard();
+  renderLeadership();
+  // My stats re-renders only if a rep is selected
+  const sel = document.getElementById('stats-rep').value;
+  if (sel) renderMyStats();
+}
+
+// ============================================================
+// REP DROPDOWNS
+// ============================================================
+function populateRepDropdowns() {
+  if (!_data || !_data.leaderboard) return;
+  const names = _data.leaderboard.map(r => r.name).sort();
+  const makeOpts = (sel) => `<option value="">— Select your name —</option>` +
+    names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+
+  const ciSel    = document.getElementById('f-rep');
+  const statsSel = document.getElementById('stats-rep');
+  const ciVal    = ciSel.value;
+  const stVal    = statsSel.value;
+  ciSel.innerHTML    = makeOpts(ciVal);
+  statsSel.innerHTML = makeOpts(stVal);
+  if (ciVal)  ciSel.value    = ciVal;
+  if (stVal)  statsSel.value = stVal;
+}
+
+// ============================================================
+// MY STATS
+// ============================================================
+function renderMyStats() {
+  const name = document.getElementById('stats-rep').value;
+  const cont = document.getElementById('stats-content');
+  if (!name || !_data) { cont.innerHTML = ''; return; }
+
+  const rep = _data.leaderboard.find(r => r.name === name);
+  if (!rep) { cont.innerHTML = '<div class="card" style="color:var(--muted)">Rep not found in data yet — submit a check-in first.</div>'; return; }
+
+  const st = statusPill(rep.status);
+  const trend = trendIcon(rep.trend);
+
+  cont.innerHTML = `
+    <div class="card">
+      <div class="card-title">Good Standing</div>
+      <div class="g3">
+        <div class="stat-box"><div class="stat-num">${rep.score}%</div><div class="stat-lbl">Overall ${st}</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.rank}</div><div class="stat-lbl">Rank</div></div>
+        <div class="stat-box"><div class="stat-num">${trend}</div><div class="stat-lbl">Trend</div></div>
+      </div>
+      <div style="margin-top:12px;" class="g4">
+        <div class="stat-box"><div class="stat-num">${rep.fieldPct}%</div><div class="stat-lbl">Field (40%)</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.meetingPct}%</div><div class="stat-lbl">Meetings (30%)</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.gymPct}%</div><div class="stat-lbl">Gym (20%)</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.devPct}%</div><div class="stat-lbl">Dev (10%)</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Streaks</div>
+      <div class="g3">
+        <div class="stat-box"><div class="stat-num">${rep.streak}🔥</div><div class="stat-lbl">Perfect Day</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.maStreak}</div><div class="stat-lbl">MA Streak</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.readStreak}</div><div class="stat-lbl">Read Streak</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.jrnlStreak}</div><div class="stat-lbl">Journal Streak</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.roleStreak}</div><div class="stat-lbl">Roleplay Streak</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.weeksGreen}</div><div class="stat-lbl">Weeks Green</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Season Totals</div>
+      <div class="g3">
+        <div class="stat-box"><div class="stat-num">${fmt(rep.doors)}</div><div class="stat-lbl">Doors</div></div>
+        <div class="stat-box"><div class="stat-num">${fmt(rep.convos)}</div><div class="stat-lbl">Convos</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.apps}</div><div class="stat-lbl">Appointments</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.deals}</div><div class="stat-lbl">Deals</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.gymSessions}</div><div class="stat-lbl">Gym Sessions</div></div>
+        <div class="stat-box">
+          <div class="stat-num">${rep.ahPages}<span style="font-size:.9rem;color:var(--muted)">/${rep.ahTotal}</span></div>
+          <div class="stat-lbl">AH Pages</div>
+          <div class="prog-bar" style="margin-top:6px;"><div class="prog-fill" style="width:${Math.min(100,Math.round(rep.ahPages/rep.ahTotal*100))}%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Badges</div>
+      <div class="badge-grid">${rep.badges.map(b => renderBadge(b)).join('')}</div>
+    </div>
+  `;
+}
+
+function renderBadge(b) {
+  const icon = BADGE_ICONS[b.id] || '🏅';
+  const earned = b.earned;
+  return `
+    <div class="badge ${earned ? 'earned' : 'locked'}">
+      <div class="badge-icon">${icon}</div>
+      <div class="badge-name">${esc(b.name)}</div>
+      <div class="badge-prog">${earned ? '✅ Earned!' : fmt(b.current) + ' / ' + fmt(b.required)}</div>
+      ${!earned ? `<div class="prog-bar"><div class="prog-fill" style="width:${b.pct}%"></div></div>` : ''}
+    </div>
+  `;
+}
+
+// ============================================================
+// LEADERBOARD
+// ============================================================
+function renderLeaderboard() {
+  if (!_data) return;
+  document.getElementById('lb-week').textContent = _data.config.currentWeek;
+  const tbody = document.getElementById('lb-body');
+  tbody.innerHTML = _data.leaderboard.map((r, i) => {
+    const rank = i + 1;
+    const emoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const isTop = rank <= 3;
+    return `<tr>
+      <td class="rank-cell ${isTop ? 'top' : ''}">${emoji}</td>
+      <td><b>${esc(r.name)}</b></td>
+      <td>${statusPill(r.status)}</td>
+      <td><b>${r.score}%</b></td>
+      <td>${r.fieldPct}%</td>
+      <td>${r.meetingPct}%</td>
+      <td>${r.gymPct}%</td>
+      <td>${r.devPct}%</td>
+      <td>${r.streak}🔥</td>
+      <td>${r.ahPages}/${r.ahTotal}</td>
+      <td>${fmt(r.doors)}</td>
+      <td>${r.apps}</td>
+      <td>${r.deals}</td>
+      <td>${trendIcon(r.trend)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// LEADERSHIP
+// ============================================================
+function renderLeadership() {
+  if (!_data) return;
+  const t = _data.teamStats;
+  const lb = _data.leaderboard;
+
+  document.getElementById('ld-overview').innerHTML = `
+    <div class="stat-box"><div class="stat-num" style="color:var(--green-t)">${t.greenCount}</div><div class="stat-lbl">Green</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--yellow-t)">${t.yellowCount}</div><div class="stat-lbl">Yellow</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--orange-t)">${t.orangeCount}</div><div class="stat-lbl">Orange</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--red-t)">${t.redCount}</div><div class="stat-lbl">Red</div></div>
+    <div class="stat-box"><div class="stat-num">${t.avgScore}%</div><div class="stat-lbl">Avg Score</div></div>
+    <div class="stat-box"><div class="stat-num">${t.totalDeals}</div><div class="stat-lbl">Total Deals</div></div>
+    <div class="stat-box"><div class="stat-num">${fmt(t.totalDoors)}</div><div class="stat-lbl">Total Doors</div></div>
+    <div class="stat-box"><div class="stat-num">${t.totalApps}</div><div class="stat-lbl">Total Apps</div></div>
+  `;
+
+  const alerts = _data.alerts || [];
+  document.getElementById('ld-alerts').innerHTML = alerts.length === 0
+    ? '<p style="color:var(--muted);font-size:.85rem">✅ All reps in good shape</p>'
+    : alerts.map(a => {
+        const cls = a.score < 60 ? 'red' : a.score < 75 ? 'orange' : 'yellow';
+        return `<div class="alert-item ${cls}">
+          <div class="alert-name">${esc(a.name)} — ${statusPill(a.status)} ${a.score}%</div>
+          <div class="alert-detail">${(a.issues||[]).join(' · ')}</div>
+        </div>`;
+      }).join('');
+
+  // Missed stats
+  const missedMa  = lb.filter(r => r.missedMa > 0).sort((a,b) => b.missedMa - a.missedMa).slice(0,5);
+  const missedGym = lb.filter(r => r.missedGym > 0).sort((a,b) => b.missedGym - a.missedGym).slice(0,5);
+  const missedDev = lb.filter(r => r.missedDev > 0).sort((a,b) => b.missedDev - a.missedDev).slice(0,5);
+  const missedHtml = (list, label) => `
+    <div>
+      <div style="font-size:.72rem;color:var(--muted);font-weight:700;margin-bottom:6px;">${label}</div>
+      ${list.length === 0 ? '<div style="font-size:.8rem;color:var(--green-t)">All good ✅</div>'
+        : list.map(r => `<div style="font-size:.8rem;padding:4px 0;border-bottom:1px solid var(--line)">
+            ${esc(r.name)} <span style="color:var(--red-t)">×${label==='MA Missed'?r.missedMa:label==='Gym Missed'?r.missedGym:r.missedDev}</span>
+          </div>`).join('')}
+    </div>`;
+  document.getElementById('ld-missed').innerHTML =
+    missedHtml(missedMa,'MA Missed') +
+    missedHtml(missedGym,'Gym Missed') +
+    missedHtml(missedDev,'Dev Missed');
+
+  // Full team table
+  document.getElementById('ld-body').innerHTML = lb.map(r => `<tr>
+    <td>${esc(r.name)}</td>
+    <td>${statusPill(r.status)}</td>
+    <td><b>${r.score}%</b></td>
+    <td>${r.fieldPct}%</td>
+    <td>${r.meetingPct}%</td>
+    <td>${r.gymPct}%</td>
+    <td>${r.devPct}%</td>
+    <td>${r.streak}🔥</td>
+    <td>${r.gymSessions}</td>
+    <td>${fmt(r.doors)}</td>
+    <td>${r.apps}</td>
+    <td>${r.deals}</td>
+    <td>${trendIcon(r.trend)}</td>
+  </tr>`).join('');
+}
+
+// ============================================================
+// CHECK-IN SUBMIT
+// ============================================================
+async function submitCheckin() {
+  const rep = document.getElementById('f-rep').value;
+  if (!rep) { showCiError('Please select your name.'); return; }
+
+  const data = {
+    date:             new Date().toISOString().split('T')[0],
+    repName:          rep,
+    photoPosted:      document.getElementById('f-photo').checked   ? 'Yes' : 'No',
+    meetingAttended:  document.getElementById('f-meeting').checked  ? 'Yes' : 'No',
+    dailyGoal:        document.getElementById('f-goal').value,
+    read10:           document.getElementById('f-read').checked     ? 'Yes' : 'No',
+    journal:          document.getElementById('f-journal').checked  ? 'Yes' : 'No',
+    roleplay:         document.getElementById('f-role').checked     ? 'Yes' : 'No',
+    ahPages:          document.getElementById('f-ah').value         || '0',
+    gymAttended:      document.getElementById('f-gym').checked      ? 'Yes' : 'No',
+    doorsKnocked:     document.getElementById('f-doors').value      || '0',
+    conversations:    document.getElementById('f-convos').value     || '0',
+    appointmentsSet:  document.getElementById('f-apps').value       || '0',
+    dealsClosed:      document.getElementById('f-deals').value      || '0',
+    biggestWin:       document.getElementById('f-win').value,
+    improveTomorrow:  document.getElementById('f-improve').value
+  };
+
+  // Validate numbers client-side
+  const nums = ['ahPages','doorsKnocked','conversations','appointmentsSet','dealsClosed'];
+  for (const f of nums) {
+    const v = parseInt(data[f]);
+    if (isNaN(v) || v < 0) { showCiError('Numbers cannot be negative.'); return; }
+  }
+
+  const btn = document.getElementById('ci-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  // Backup to localStorage
+  const key = 'x5_' + data.date + '_' + rep.replace(/\s+/g,'_');
+  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+
+  try {
+    if (!_apiUrl) throw new Error('API URL not configured');
+    await fetch(_apiUrl, {
+      method: 'POST',
+      mode:   'no-cors',
+      body:   JSON.stringify(data)
+    });
+    // no-cors = can't read response; wait then reload
+    await new Promise(r => setTimeout(r, 1500));
+    resetForm();
+    showCiSuccess();
+    loadData(true); // refresh leaderboard
+  } catch(err) {
+    showCiError('Submit failed: ' + err.message + '. Data saved locally.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Check-In';
+  }
+}
+
+function showCiSuccess() {
+  const s = document.getElementById('ci-success');
+  const e = document.getElementById('ci-error');
+  e.style.display = 'none';
+  s.style.display = 'block';
+  s.scrollIntoView({ behavior:'smooth' });
+  setTimeout(() => { s.style.display = 'none'; }, 5000);
+}
+
+function showCiError(msg) {
+  const e = document.getElementById('ci-error');
+  e.textContent = '⚠️ ' + msg;
+  e.style.display = 'block';
+  e.scrollIntoView({ behavior:'smooth' });
+  setTimeout(() => { e.style.display = 'none'; }, 6000);
+}
+
+function resetForm() {
+  ['f-photo','f-meeting','f-read','f-journal','f-role','f-gym']
+    .forEach(id => { document.getElementById(id).checked = false; });
+  ['f-goal','f-ah','f-doors','f-convos','f-apps','f-deals','f-win','f-improve']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('f-rep').value = '';
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tab, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById('view-' + tab);
+  if (el) el.classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'mystats') renderMyStats();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function statusPill(s) {
+  const map = { Green:'green', Yellow:'yellow', Orange:'orange', Red:'red' };
+  return `<span class="pill pill-${map[s]||'red'}">${s}</span>`;
+}
+
+function trendIcon(t) {
+  if (t === 'up')   return '<span class="trend-up">▲</span>';
+  if (t === 'down') return '<span class="trend-down">▼</span>';
+  return '<span class="trend-neutral">—</span>';
+}
+
+function fmt(n) { return typeof n === 'number' ? n.toLocaleString() : (parseInt(n)||0).toLocaleString(); }
+
+function esc(s) {
+  if (!s) return '';
+  return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
