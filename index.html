@@ -125,6 +125,27 @@ tr:hover td{background:rgba(255,255,255,.03);}
 .trend-neutral{color:var(--muted);}
 /* SECTION DIVIDER */
 .section-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);margin:16px 0 8px;}
+/* TODAY STATUS (Feature 1) */
+.today-status-row{display:flex;align-items:center;justify-content:space-between;
+  background:var(--card2);border-radius:8px;padding:10px 14px;margin-top:10px;}
+.today-status-row .ts-label{font-size:.82rem;font-weight:600;}
+.today-status-row .ts-right{text-align:right;}
+.today-chip{font-size:.8rem;font-weight:700;}
+.today-chip.submitted{color:var(--green-t);}
+.today-chip.missing{color:var(--red-t);}
+.checkin-time{font-size:.7rem;color:var(--muted);margin-top:2px;}
+/* PRIORITY LIST (Feature 5) */
+.priority-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+  background:var(--card2);border-radius:8px;margin-bottom:8px;border-left:3px solid;}
+.priority-item.p0{border-color:#dc2626;}
+.priority-item.p1{border-color:#dc2626;}
+.priority-item.p2{border-color:var(--orange-t);}
+.priority-item.p3{border-color:var(--gold);}
+.pi-name{font-weight:700;font-size:.88rem;}
+.pi-reason{font-size:.73rem;color:var(--muted);margin-top:2px;}
+/* 1:1 FLAG (Feature 4) */
+.flag-1on1{display:inline-block;background:#3b0000;color:#fca5a5;
+  font-size:.65rem;font-weight:700;padding:1px 7px;border-radius:10px;border:1px solid #7f1d1d;margin-left:4px;}
 /* RESPONSIVE */
 @media(max-width:480px){
   .g2,.g3,.g4{grid-template-columns:1fr 1fr;}
@@ -138,10 +159,10 @@ tr:hover td{background:rgba(255,255,255,.03);}
 <body>
 
 <header>
-  <div class="logo">⚡ X5 SUMMER BOOTCAMP</div>
+  <div class="logo">â¡ X5 SUMMER BOOTCAMP</div>
   <div class="header-right">
-    <span class="last-updated" id="lastUpdated">—</span>
-    <button class="refresh-btn" onclick="loadData(true)">↻ Refresh</button>
+    <span class="last-updated" id="lastUpdated">â</span>
+    <button class="refresh-btn" onclick="loadData(true)">â» Refresh</button>
   </div>
 </header>
 
@@ -155,20 +176,20 @@ tr:hover td{background:rgba(255,255,255,.03);}
 <!-- ==================== SETUP SCREEN ==================== -->
 <div id="setup-screen" style="display:none;padding:16px;">
   <div class="setup-box">
-    <h2>🔧 Connect to Google Sheets</h2>
+    <h2>ð§ Connect to Google Sheets</h2>
     <p style="color:var(--muted);margin-bottom:16px;font-size:.88rem;">
       Paste your Google Apps Script Web App URL below to go live.
       If you haven't deployed the Apps Script yet, follow these steps:
     </p>
     <ol>
-      <li>Open your Google Sheet → <b>Extensions</b> → <b>Apps Script</b></li>
+      <li>Open your Google Sheet â <b>Extensions</b> â <b>Apps Script</b></li>
       <li>Paste the contents of <code>x5_apps_script.gs</code></li>
       <li>Run <code>setupSheets()</code> (click Run button)</li>
       <li>Authorize permissions when prompted</li>
-      <li><b>Deploy</b> → <b>New deployment</b> → Type: <b>Web App</b></li>
-      <li>Execute as: <b>Me</b> · Who has access: <b>Anyone</b></li>
-      <li>Click <b>Deploy</b> → copy the Web App URL</li>
-      <li>Paste it here ↓</li>
+      <li><b>Deploy</b> â <b>New deployment</b> â Type: <b>Web App</b></li>
+      <li>Execute as: <b>Me</b> Â· Who has access: <b>Anyone</b></li>
+      <li>Click <b>Deploy</b> â copy the Web App URL</li>
+      <li>Paste it here â</li>
     </ol>
     <div class="setup-url-input">
       <input type="url" id="apiUrlInput" placeholder="https://script.google.com/macros/s/..." />
@@ -179,7 +200,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
 
 <!-- ==================== MAIN LOADING ==================== -->
 <div id="main-loading" style="display:none;">
-  <div class="loading-box"><div class="spinner"></div><span style="color:var(--muted)">Loading dashboard…</span></div>
+  <div class="loading-box"><div class="spinner"></div><span style="color:var(--muted)">Loading dashboardâ¦</span></div>
 </div>
 <div id="main-error" style="display:none;padding:16px;">
   <div class="card" style="border:1px solid #dc2626;text-align:center;padding:24px;">
@@ -197,21 +218,21 @@ tr:hover td{background:rgba(255,255,255,.03);}
 <div id="view-checkin" class="view active">
   <div class="card">
     <div class="card-title">Daily Check-In</div>
-    <div id="ci-success" class="notice success">✅ Check-in submitted! See you tomorrow.</div>
+    <div id="ci-success" class="notice success">â Check-in submitted! See you tomorrow.</div>
     <div id="ci-error"   class="notice error"></div>
 
     <div class="form-group">
       <label>Your Name *</label>
-      <select id="f-rep"><option value="">— Select your name —</option></select>
+      <select id="f-rep"><option value="">â Select your name â</option></select>
     </div>
 
     <div class="section-label">Morning Accountability</div>
     <div class="toggle-row">
-      <span class="toggle-label">📸 Photo Posted In Pronto</span>
+      <span class="toggle-label">ð¸ Photo Posted In Pronto</span>
       <label class="toggle"><input type="checkbox" id="f-photo"><span class="slider"></span></label>
     </div>
     <div class="toggle-row">
-      <span class="toggle-label">🤝 Morning Meeting Attended</span>
+      <span class="toggle-label">ð¤ Morning Meeting Attended</span>
       <label class="toggle"><input type="checkbox" id="f-meeting"><span class="slider"></span></label>
     </div>
     <div class="form-group" style="margin-top:8px;">
@@ -221,15 +242,15 @@ tr:hover td{background:rgba(255,255,255,.03);}
 
     <div class="section-label">Development Block</div>
     <div class="toggle-row">
-      <span class="toggle-label">📖 Read 10 Pages</span>
+      <span class="toggle-label">ð Read 10 Pages</span>
       <label class="toggle"><input type="checkbox" id="f-read"><span class="slider"></span></label>
     </div>
     <div class="toggle-row">
-      <span class="toggle-label">✏️ Journal</span>
+      <span class="toggle-label">âï¸ Journal</span>
       <label class="toggle"><input type="checkbox" id="f-journal"><span class="slider"></span></label>
     </div>
     <div class="toggle-row">
-      <span class="toggle-label">🎭 Roleplay (15 min)</span>
+      <span class="toggle-label">ð­ Roleplay (15 min)</span>
       <label class="toggle"><input type="checkbox" id="f-role"><span class="slider"></span></label>
     </div>
     <div class="form-group" style="margin-top:8px;">
@@ -239,7 +260,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
 
     <div class="section-label">Gym</div>
     <div class="toggle-row">
-      <span class="toggle-label">💪 Gym Attended</span>
+      <span class="toggle-label">ðª Gym Attended</span>
       <label class="toggle"><input type="checkbox" id="f-gym"><span class="slider"></span></label>
     </div>
 
@@ -266,7 +287,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
   <div class="card">
     <div class="card-title">Select Rep</div>
     <select id="stats-rep" onchange="renderMyStats()" style="background:var(--card2);border:1px solid var(--subtle);border-radius:6px;color:var(--text);padding:10px 12px;font-size:.9rem;width:100%;">
-      <option value="">— Select your name —</option>
+      <option value="">â Select your name â</option>
     </select>
   </div>
   <div id="stats-content"></div>
@@ -275,14 +296,14 @@ tr:hover td{background:rgba(255,255,255,.03);}
 <!-- LEADERBOARD -->
 <div id="view-leaderboard" class="view">
   <div class="card">
-    <div class="card-title">Season Leaderboard · Week <span id="lb-week">—</span></div>
+    <div class="card-title">Season Leaderboard Â· Week <span id="lb-week">â</span></div>
     <div class="tbl-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th><th>Rep</th><th>Status</th><th>Score</th>
+            <th>#</th><th>Rep</th><th>Status</th><th>Score</th><th>Wk%</th>
             <th>Field</th><th>Mtgs</th><th>Gym</th><th>Dev</th>
-            <th>Streak</th><th>AH</th><th>Doors</th><th>Apps</th><th>Deals</th><th>↑↓</th>
+            <th>Streak</th><th>AH</th><th>Doors</th><th>Apps</th><th>Deals</th><th>ââ</th>
           </tr>
         </thead>
         <tbody id="lb-body"></tbody>
@@ -293,19 +314,27 @@ tr:hover td{background:rgba(255,255,255,.03);}
 
 <!-- LEADERSHIP -->
 <div id="view-leadership" class="view">
+
+  <!-- Feature 5: Priority List â top of Leadership -->
+  <div class="card">
+    <div class="card-title">ð¨ Priority Action List</div>
+    <div id="ld-priority"></div>
+  </div>
+
   <div class="card">
     <div class="card-title">Team Overview</div>
     <div class="g4" id="ld-overview"></div>
   </div>
 
   <div class="card">
-    <div class="card-title">⚠️ Needs Attention</div>
+    <div class="card-title">â ï¸ Needs Attention</div>
     <div id="ld-alerts"></div>
   </div>
 
+  <!-- Feature 1: Today's Submissions (replaces Missed Today) -->
   <div class="card">
-    <div class="card-title">Missed Today (last check-in)</div>
-    <div class="g3" id="ld-missed"></div>
+    <div class="card-title">Today's Submissions</div>
+    <div id="ld-today-submissions"></div>
   </div>
 
   <div class="card">
@@ -314,9 +343,9 @@ tr:hover td{background:rgba(255,255,255,.03);}
       <table>
         <thead>
           <tr>
-            <th>Rep</th><th>Status</th><th>Score</th>
+            <th>Rep</th><th>Status</th><th>Score</th><th>Wk%</th>
             <th>Field%</th><th>Mtg%</th><th>Gym%</th><th>Dev%</th>
-            <th>Streak</th><th>Gym Sess</th><th>Doors</th><th>Apps</th><th>Deals</th><th>↑↓</th>
+            <th>Streak</th><th>Gym</th><th>Doors</th><th>Apps</th><th>Deals</th><th>ââ</th><th>1:1</th>
           </tr>
         </thead>
         <tbody id="ld-body"></tbody>
@@ -339,16 +368,16 @@ let _data   = null;  // cached API response
 let _refreshTimer = null;
 
 const BADGE_ICONS = {
-  streak7:'🔥', streak30:'⚡', ahDone:'📖',
-  gym20:'💪', apps10:'📅', apps25:'🎯',
-  doors1k:'🚪', doors5k:'🏆', green4w:'🟢'
+  streak7:'ð¥', streak30:'â¡', ahDone:'ð',
+  gym20:'ðª', apps10:'ð', apps25:'ð¯',
+  doors1k:'ðª', doors5k:'ð', green4w:'ð¢'
 };
 
 // ============================================================
 // INIT
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('f-rep').innerHTML = '<option value="">— Select your name —</option>';
+  document.getElementById('f-rep').innerHTML = '<option value="">â Select your name â</option>';
   if (!_apiUrl) {
     showSetup();
   } else {
@@ -436,15 +465,15 @@ function renderAll() {
 function populateRepDropdowns() {
   if (!_data || !_data.leaderboard) return;
   const names = _data.leaderboard.map(r => r.name).sort();
-  const makeOpts = (sel) => `<option value="">— Select your name —</option>` +
+  const makeOpts = () => `<option value="">â Select your name â</option>` +
     names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
 
   const ciSel    = document.getElementById('f-rep');
   const statsSel = document.getElementById('stats-rep');
   const ciVal    = ciSel.value;
   const stVal    = statsSel.value;
-  ciSel.innerHTML    = makeOpts(ciVal);
-  statsSel.innerHTML = makeOpts(stVal);
+  ciSel.innerHTML    = makeOpts();
+  statsSel.innerHTML = makeOpts();
   if (ciVal)  ciSel.value    = ciVal;
   if (stVal)  statsSel.value = stVal;
 }
@@ -458,16 +487,39 @@ function renderMyStats() {
   if (!name || !_data) { cont.innerHTML = ''; return; }
 
   const rep = _data.leaderboard.find(r => r.name === name);
-  if (!rep) { cont.innerHTML = '<div class="card" style="color:var(--muted)">Rep not found in data yet — submit a check-in first.</div>'; return; }
+  if (!rep) {
+    cont.innerHTML = '<div class="card" style="color:var(--muted)">Rep not found in data yet â submit a check-in first.</div>';
+    return;
+  }
 
-  const st = statusPill(rep.status);
+  const st    = statusPill(rep.status);
   const trend = trendIcon(rep.trend);
+
+  // Feature 1: Today's submission status
+  const submitted   = rep.submittedToday;
+  const chipClass   = submitted ? 'submitted' : 'missing';
+  const chipText    = submitted ? 'â Submitted Today' : 'â Not Submitted Today';
+  const lastTime    = rep.lastCheckinIso
+    ? new Date(rep.lastCheckinIso).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
+    : null;
+  const lastDateStr = rep.lastCheckinDate || null;
+  const todayStr    = new Date().toISOString().split('T')[0];
+  let timeDisplay   = '';
+  if (lastTime && lastDateStr) {
+    timeDisplay = lastDateStr === todayStr
+      ? 'Last Check-In: ' + lastTime
+      : 'Last Check-In: ' + lastDateStr + ' ' + lastTime;
+  }
+
+  // Feature 2: Week score
+  const weekScoreColor = rep.weekScore >= 90 ? 'var(--green-t)' : rep.weekScore >= 75 ? 'var(--yellow-t)' : rep.weekScore >= 60 ? 'var(--orange-t)' : 'var(--red-t)';
 
   cont.innerHTML = `
     <div class="card">
       <div class="card-title">Good Standing</div>
-      <div class="g3">
-        <div class="stat-box"><div class="stat-num">${rep.score}%</div><div class="stat-lbl">Overall ${st}</div></div>
+      <div class="g4">
+        <div class="stat-box"><div class="stat-num">${rep.score}%</div><div class="stat-lbl">Season ${st}</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:${weekScoreColor}">${rep.weekScore}%</div><div class="stat-lbl">This Week</div></div>
         <div class="stat-box"><div class="stat-num">${rep.rank}</div><div class="stat-lbl">Rank</div></div>
         <div class="stat-box"><div class="stat-num">${trend}</div><div class="stat-lbl">Trend</div></div>
       </div>
@@ -477,17 +529,42 @@ function renderMyStats() {
         <div class="stat-box"><div class="stat-num">${rep.gymPct}%</div><div class="stat-lbl">Gym (20%)</div></div>
         <div class="stat-box"><div class="stat-num">${rep.devPct}%</div><div class="stat-lbl">Dev (10%)</div></div>
       </div>
+      <div class="today-status-row">
+        <span class="ts-label">Today's Status</span>
+        <div class="ts-right">
+          <div class="today-chip ${chipClass}">${chipText}</div>
+          ${timeDisplay ? `<div class="checkin-time">${esc(timeDisplay)}</div>` : ''}
+        </div>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-title">Streaks</div>
       <div class="g3">
-        <div class="stat-box"><div class="stat-num">${rep.streak}🔥</div><div class="stat-lbl">Perfect Day</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.streak}ð¥</div><div class="stat-lbl">Perfect Day</div></div>
         <div class="stat-box"><div class="stat-num">${rep.maStreak}</div><div class="stat-lbl">MA Streak</div></div>
         <div class="stat-box"><div class="stat-num">${rep.readStreak}</div><div class="stat-lbl">Read Streak</div></div>
         <div class="stat-box"><div class="stat-num">${rep.jrnlStreak}</div><div class="stat-lbl">Journal Streak</div></div>
         <div class="stat-box"><div class="stat-num">${rep.roleStreak}</div><div class="stat-lbl">Roleplay Streak</div></div>
         <div class="stat-box"><div class="stat-num">${rep.weeksGreen}</div><div class="stat-lbl">Weeks Green</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Perfect Days</div>
+      <div class="g4">
+        <div class="stat-box">
+          <div class="stat-num" style="color:${rep.todayPerfect ? 'var(--green-t)' : 'var(--muted)'}">
+            ${rep.todayPerfect ? 'â' : 'â'}
+          </div>
+          <div class="stat-lbl">Today</div>
+        </div>
+        <div class="stat-box"><div class="stat-num">${rep.perfectDaysThisWeek}</div><div class="stat-lbl">This Week</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.perfectDaysThisMonth}</div><div class="stat-lbl">This Month</div></div>
+        <div class="stat-box"><div class="stat-num">${rep.streak}ð¥</div><div class="stat-lbl">Streak</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:.72rem;color:var(--muted);line-height:1.5;">
+        Perfect Day = Photo in Pronto + Morning Meeting + Read 10 Pages + Journal + Roleplay + Gym
       </div>
     </div>
 
@@ -515,39 +592,41 @@ function renderMyStats() {
 }
 
 function renderBadge(b) {
-  const icon = BADGE_ICONS[b.id] || '🏅';
+  const icon = BADGE_ICONS[b.id] || 'ð';
   const earned = b.earned;
   return `
     <div class="badge ${earned ? 'earned' : 'locked'}">
       <div class="badge-icon">${icon}</div>
       <div class="badge-name">${esc(b.name)}</div>
-      <div class="badge-prog">${earned ? '✅ Earned!' : fmt(b.current) + ' / ' + fmt(b.required)}</div>
+      <div class="badge-prog">${earned ? 'â Earned!' : fmt(b.current) + ' / ' + fmt(b.required)}</div>
       ${!earned ? `<div class="prog-bar"><div class="prog-fill" style="width:${b.pct}%"></div></div>` : ''}
     </div>
   `;
 }
 
 // ============================================================
-// LEADERBOARD
+// LEADERBOARD â Feature 2: Wk% column added
 // ============================================================
 function renderLeaderboard() {
   if (!_data) return;
   document.getElementById('lb-week').textContent = _data.config.currentWeek;
   const tbody = document.getElementById('lb-body');
   tbody.innerHTML = _data.leaderboard.map((r, i) => {
-    const rank = i + 1;
-    const emoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const rank  = i + 1;
+    const emoji = rank === 1 ? 'ð¥' : rank === 2 ? 'ð¥' : rank === 3 ? 'ð¥' : rank;
     const isTop = rank <= 3;
+    const wkColor = r.weekScore >= 90 ? 'var(--green-t)' : r.weekScore >= 75 ? 'var(--yellow-t)' : r.weekScore >= 60 ? 'var(--orange-t)' : 'var(--red-t)';
     return `<tr>
       <td class="rank-cell ${isTop ? 'top' : ''}">${emoji}</td>
       <td><b>${esc(r.name)}</b></td>
       <td>${statusPill(r.status)}</td>
       <td><b>${r.score}%</b></td>
+      <td style="color:${wkColor};font-weight:700">${r.weekScore != null ? r.weekScore + '%' : 'â'}</td>
       <td>${r.fieldPct}%</td>
       <td>${r.meetingPct}%</td>
       <td>${r.gymPct}%</td>
       <td>${r.devPct}%</td>
-      <td>${r.streak}🔥</td>
+      <td>${r.streak}ð¥</td>
       <td>${r.ahPages}/${r.ahTotal}</td>
       <td>${fmt(r.doors)}</td>
       <td>${r.apps}</td>
@@ -558,193 +637,76 @@ function renderLeaderboard() {
 }
 
 // ============================================================
-// LEADERSHIP
+// LEADERSHIP â Features 1,2,3,4,5
 // ============================================================
 function renderLeadership() {
   if (!_data) return;
-  const t = _data.teamStats;
+  const t  = _data.teamStats;
   const lb = _data.leaderboard;
+  const todayStr = new Date().toISOString().split('T')[0];
 
+  // ââ Feature 5: Priority Action List ââââââââââââââââââââââââââ
+  // urgency 0 = No check-in today, 1 = Red, 2 = Orange, 3 = Trend Down / other issues
+  const priorityReps = lb
+    .map(r => {
+      let urgency = 99;
+      const reasons = [];
+      if (!r.submittedToday) { urgency = Math.min(urgency, 0); reasons.push('No Check-In Today'); }
+      if (r.status === 'Red')    { urgency = Math.min(urgency, 1); reasons.push('Red Status'); }
+      if (r.status === 'Orange') { urgency = Math.min(urgency, 2); reasons.push('Orange Status'); }
+      if (r.trend === 'down')    { urgency = Math.min(urgency, 3); reasons.push('Trend Down'); }
+      if (r.needs1on1 && urgency === 99) {
+        urgency = 3;
+        reasons.push(...(r.reasons1on1 || []));
+      }
+      return urgency < 99 ? { ...r, urgency, priorityReasons: reasons } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.urgency - b.urgency || a.name.localeCompare(b.name));
+
+  const priorityCls = u => u === 0 ? 'p0' : u === 1 ? 'p1' : u === 2 ? 'p2' : 'p3';
+  document.getElementById('ld-priority').innerHTML = priorityReps.length === 0
+    ? '<p style="color:var(--green-t);font-size:.85rem">â All reps on track today</p>'
+    : priorityReps.map(r => `
+        <div class="priority-item ${priorityCls(r.urgency)}">
+          <div style="flex:1">
+            <div class="pi-name">${esc(r.name)} â ${statusPill(r.status)} ${r.score}%
+              ${r.needs1on1 ? '<span class="flag-1on1">â ï¸ 1:1 Needed</span>' : ''}
+            </div>
+            <div class="pi-reason">${r.priorityReasons.join(' Â· ')}</div>
+          </div>
+          <div style="text-align:right;font-size:.75rem;color:var(--muted)">
+            Wk: ${r.weekScore != null ? r.weekScore + '%' : 'â'}
+          </div>
+        </div>`).join('');
+
+  // ââ Team Overview ââââââââââââââââââââââââââââââââââââââââââ
   document.getElementById('ld-overview').innerHTML = `
     <div class="stat-box"><div class="stat-num" style="color:var(--green-t)">${t.greenCount}</div><div class="stat-lbl">Green</div></div>
     <div class="stat-box"><div class="stat-num" style="color:var(--yellow-t)">${t.yellowCount}</div><div class="stat-lbl">Yellow</div></div>
     <div class="stat-box"><div class="stat-num" style="color:var(--orange-t)">${t.orangeCount}</div><div class="stat-lbl">Orange</div></div>
     <div class="stat-box"><div class="stat-num" style="color:var(--red-t)">${t.redCount}</div><div class="stat-lbl">Red</div></div>
     <div class="stat-box"><div class="stat-num">${t.avgScore}%</div><div class="stat-lbl">Avg Score</div></div>
+    <div class="stat-box"><div class="stat-num">${t.submittedToday != null ? t.submittedToday : 'â'}</div><div class="stat-lbl">Submitted Today</div></div>
     <div class="stat-box"><div class="stat-num">${t.totalDeals}</div><div class="stat-lbl">Total Deals</div></div>
     <div class="stat-box"><div class="stat-num">${fmt(t.totalDoors)}</div><div class="stat-lbl">Total Doors</div></div>
-    <div class="stat-box"><div class="stat-num">${t.totalApps}</div><div class="stat-lbl">Total Apps</div></div>
   `;
 
+  // ââ Feature 4: Needs Attention (with 1:1 flags) âââââââââââ
   const alerts = _data.alerts || [];
-  document.getElementById('ld-alerts').innerHTML = alerts.length === 0
-    ? '<p style="color:var(--muted);font-size:.85rem">✅ All reps in good shape</p>'
-    : alerts.map(a => {
-        const cls = a.score < 60 ? 'red' : a.score < 75 ? 'orange' : 'yellow';
-        return `<div class="alert-item ${cls}">
-          <div class="alert-name">${esc(a.name)} — ${statusPill(a.status)} ${a.score}%</div>
-          <div class="alert-detail">${(a.issues||[]).join(' · ')}</div>
-        </div>`;
-      }).join('');
+  // also merge in needs1on1 reps not already in alerts
+  const alertNames = new Set(alerts.map(a => a.name));
+  const extra1on1 = lb.filter(r => r.needs1on1 && !alertNames.has(r.name));
 
-  // Missed stats
-  const missedMa  = lb.filter(r => r.missedMa > 0).sort((a,b) => b.missedMa - a.missedMa).slice(0,5);
-  const missedGym = lb.filter(r => r.missedGym > 0).sort((a,b) => b.missedGym - a.missedGym).slice(0,5);
-  const missedDev = lb.filter(r => r.missedDev > 0).sort((a,b) => b.missedDev - a.missedDev).slice(0,5);
-  const missedHtml = (list, label) => `
-    <div>
-      <div style="font-size:.72rem;color:var(--muted);font-weight:700;margin-bottom:6px;">${label}</div>
-      ${list.length === 0 ? '<div style="font-size:.8rem;color:var(--green-t)">All good ✅</div>'
-        : list.map(r => `<div style="font-size:.8rem;padding:4px 0;border-bottom:1px solid var(--line)">
-            ${esc(r.name)} <span style="color:var(--red-t)">×${label==='MA Missed'?r.missedMa:label==='Gym Missed'?r.missedGym:r.missedDev}</span>
-          </div>`).join('')}
-    </div>`;
-  document.getElementById('ld-missed').innerHTML =
-    missedHtml(missedMa,'MA Missed') +
-    missedHtml(missedGym,'Gym Missed') +
-    missedHtml(missedDev,'Dev Missed');
+  const allAlerts = [
+    ...alerts.map(a => {
+      const rep = lb.find(r => r.name === a.name);
+      return { ...a, needs1on1: rep ? rep.needs1on1 : false, reasons1on1: rep ? rep.reasons1on1 : [] };
+    }),
+    ...extra1on1.map(r => ({
+      name: r.name, score: r.score, status: r.status,
+      issues: r.reasons1on1, needs1on1: true, reasons1on1: r.reasons1on1
+    }))
+  ];
 
-  // Full team table
-  document.getElementById('ld-body').innerHTML = lb.map(r => `<tr>
-    <td>${esc(r.name)}</td>
-    <td>${statusPill(r.status)}</td>
-    <td><b>${r.score}%</b></td>
-    <td>${r.fieldPct}%</td>
-    <td>${r.meetingPct}%</td>
-    <td>${r.gymPct}%</td>
-    <td>${r.devPct}%</td>
-    <td>${r.streak}🔥</td>
-    <td>${r.gymSessions}</td>
-    <td>${fmt(r.doors)}</td>
-    <td>${r.apps}</td>
-    <td>${r.deals}</td>
-    <td>${trendIcon(r.trend)}</td>
-  </tr>`).join('');
-}
-
-// ============================================================
-// CHECK-IN SUBMIT
-// ============================================================
-async function submitCheckin() {
-  const rep = document.getElementById('f-rep').value;
-  if (!rep) { showCiError('Please select your name.'); return; }
-
-  const data = {
-    date:             new Date().toISOString().split('T')[0],
-    repName:          rep,
-    photoPosted:      document.getElementById('f-photo').checked   ? 'Yes' : 'No',
-    meetingAttended:  document.getElementById('f-meeting').checked  ? 'Yes' : 'No',
-    dailyGoal:        document.getElementById('f-goal').value,
-    read10:           document.getElementById('f-read').checked     ? 'Yes' : 'No',
-    journal:          document.getElementById('f-journal').checked  ? 'Yes' : 'No',
-    roleplay:         document.getElementById('f-role').checked     ? 'Yes' : 'No',
-    ahPages:          document.getElementById('f-ah').value         || '0',
-    gymAttended:      document.getElementById('f-gym').checked      ? 'Yes' : 'No',
-    doorsKnocked:     document.getElementById('f-doors').value      || '0',
-    conversations:    document.getElementById('f-convos').value     || '0',
-    appointmentsSet:  document.getElementById('f-apps').value       || '0',
-    dealsClosed:      document.getElementById('f-deals').value      || '0',
-    biggestWin:       document.getElementById('f-win').value,
-    improveTomorrow:  document.getElementById('f-improve').value
-  };
-
-  // Validate numbers client-side
-  const nums = ['ahPages','doorsKnocked','conversations','appointmentsSet','dealsClosed'];
-  for (const f of nums) {
-    const v = parseInt(data[f]);
-    if (isNaN(v) || v < 0) { showCiError('Numbers cannot be negative.'); return; }
-  }
-
-  const btn = document.getElementById('ci-btn');
-  btn.disabled = true;
-  btn.textContent = 'Submitting…';
-
-  // Backup to localStorage
-  const key = 'x5_' + data.date + '_' + rep.replace(/\s+/g,'_');
-  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
-
-  try {
-    if (!_apiUrl) throw new Error('API URL not configured');
-    await fetch(_apiUrl, {
-      method: 'POST',
-      mode:   'no-cors',
-      body:   JSON.stringify(data)
-    });
-    // no-cors = can't read response; wait then reload
-    await new Promise(r => setTimeout(r, 1500));
-    resetForm();
-    showCiSuccess();
-    loadData(true); // refresh leaderboard
-  } catch(err) {
-    showCiError('Submit failed: ' + err.message + '. Data saved locally.');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Submit Check-In';
-  }
-}
-
-function showCiSuccess() {
-  const s = document.getElementById('ci-success');
-  const e = document.getElementById('ci-error');
-  e.style.display = 'none';
-  s.style.display = 'block';
-  s.scrollIntoView({ behavior:'smooth' });
-  setTimeout(() => { s.style.display = 'none'; }, 5000);
-}
-
-function showCiError(msg) {
-  const e = document.getElementById('ci-error');
-  e.textContent = '⚠️ ' + msg;
-  e.style.display = 'block';
-  e.scrollIntoView({ behavior:'smooth' });
-  setTimeout(() => { e.style.display = 'none'; }, 6000);
-}
-
-function resetForm() {
-  ['f-photo','f-meeting','f-read','f-journal','f-role','f-gym']
-    .forEach(id => { document.getElementById(id).checked = false; });
-  ['f-goal','f-ah','f-doors','f-convos','f-apps','f-deals','f-win','f-improve']
-    .forEach(id => { document.getElementById(id).value = ''; });
-  document.getElementById('f-rep').value = '';
-}
-
-// ============================================================
-// TAB SWITCHING
-// ============================================================
-function switchTab(tab, btn) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('view-' + tab);
-  if (el) el.classList.add('active');
-  btn.classList.add('active');
-  if (tab === 'mystats') renderMyStats();
-}
-
-// ============================================================
-// HELPERS
-// ============================================================
-function statusPill(s) {
-  const map = { Green:'green', Yellow:'yellow', Orange:'orange', Red:'red' };
-  return `<span class="pill pill-${map[s]||'red'}">${s}</span>`;
-}
-
-function trendIcon(t) {
-  if (t === 'up')   return '<span class="trend-up">▲</span>';
-  if (t === 'down') return '<span class="trend-down">▼</span>';
-  return '<span class="trend-neutral">—</span>';
-}
-
-function fmt(n) { return typeof n === 'number' ? n.toLocaleString() : (parseInt(n)||0).toLocaleString(); }
-
-function esc(s) {
-  if (!s) return '';
-  return s.toString()
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
-}
-</script>
-</body>
-</html>
+  document.getElementById('ld-alerts').innerHTML 
