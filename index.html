@@ -838,7 +838,7 @@ async function submitCheckin() {
     if (!_apiUrl) throw new Error('API URL not configured');
     const res  = await fetchWithTimeout(_apiUrl, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'text/plain'},
       body: JSON.stringify(data)
     }, 20000);
     const json = await res.json();
@@ -887,3 +887,4 @@ function switchTab(tab, btn) {
 </script>
 </body>
 </html>
+      
